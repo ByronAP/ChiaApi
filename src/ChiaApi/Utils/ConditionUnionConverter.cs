@@ -10,6 +10,7 @@ namespace ChiaApi.Utils
         public override bool CanConvert(Type t) => t == typeof(ConditionUnion) || t == typeof(ConditionUnion?);
 
 #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
 #pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
@@ -20,6 +21,7 @@ namespace ChiaApi.Utils
                     var stringValue = serializer.Deserialize<string>(reader);
                     if (stringValue == null) stringValue = string.Empty;
                     return new ConditionUnion { String = stringValue };
+
                 case JsonToken.StartArray:
                     var arrayValue = serializer.Deserialize<List<Condition>>(reader);
                     if (arrayValue == null) arrayValue = new List<Condition>();
@@ -29,6 +31,7 @@ namespace ChiaApi.Utils
         }
 
 #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
 #pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {

@@ -2,7 +2,7 @@
  * STOPPING WORK ON THIS PART OF THE API UNTIL THE CAT1 vs CC api differences are resolved
  * https://www.chia.net/2021/09/23/chia-token-standard-naming.en.html
  * https://github.com/Chia-Network/chia-blockchain/discussions/8689
- * 
+ *
  * Pending question about host parameter usage
  * https://github.com/Chia-Network/chia-blockchain/discussions/8679
  */
@@ -19,69 +19,11 @@ namespace ChiaApi
 {
     public class WalletApiClient : ApiClientBase
     {
-        public WalletApiClient(ChiaApiConfig chiaApiConfig) : base(chiaApiConfig) { }
+        public WalletApiClient(ChiaApiConfig chiaApiConfig) : base(chiaApiConfig)
+        {
+        }
 
         #region Key management
-
-        public async Task<FingerprintResponse> LoginAsync(ulong fingerprint, LoginType loginType, string filePath = "", string host = "")
-        {
-            filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
-            const string resource = "log_in";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"fingerprint\":{fingerprint},\"type\":\"{loginType.ToString().ToLowerInvariant()}\",\"host\":\"{host}\",\"file_path\":\"{filePath}\"}}");
-
-            var response = await _restClient.ExecuteAsync<FingerprintResponse>(request);
-
-            return response;
-        }
-
-        public Task<FingerprintResponse> LoginAsync(ulong fingerprint)
-        {
-            return LoginAsync(fingerprint, LoginType.Start);
-        }
-
-        public Task<FingerprintResponse> LoginAndRestoreAsync(ulong fingerprint, string filePath)
-        {
-            return LoginAsync(fingerprint, LoginType.Restore_Backup, filePath);
-        }
-
-        public Task<FingerprintResponse> LoginAndSkipAsync(ulong fingerprint)
-        {
-            return LoginAsync(fingerprint, LoginType.Skip);
-        }
-
-        public async Task<PublicKeysResponse> GetPublicKeysAsync()
-        {
-            const string resource = "get_public_keys";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody("{}");
-
-            var response = await _restClient.ExecuteAsync<PublicKeysResponse>(request);
-
-            return response;
-        }
-
-        public async Task<PrivateKeyResponse> GetPrivateKeyAsync(ulong fingerprint)
-        {
-            const string resource = "get_private_key";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"fingerprint\":{fingerprint}}}");
-
-            var response = await _restClient.ExecuteAsync<PrivateKeyResponse>(request);
-
-            return response;
-        }
-
-        public async Task<GenerateMnemonicResponse> GenerateMnemonicAsync()
-        {
-            const string resource = "generate_mnemonic";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody("{}");
-
-            var response = await _restClient.ExecuteAsync<GenerateMnemonicResponse>(request);
-
-            return response;
-        }
 
         public async Task<FingerprintResponse> AddKeyAsync(IEnumerable<string> mnemonic)
         {
@@ -105,13 +47,13 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<BoolResponse> DeleteKeyAsync(ulong fingerprint)
+        public async Task<CheckDeleteKeyResponse> CheckDeleteKeyAsync(ulong fingerprint)
         {
-            const string resource = "delete_key";
+            const string resource = "check_delete_key";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
             request.AddJsonBody($"{{\"fingerprint\":{fingerprint}}}");
 
-            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
+            var response = await _restClient.ExecuteAsync<CheckDeleteKeyResponse>(request);
 
             return response;
         }
@@ -127,28 +69,88 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<CheckDeleteKeyResponse> CheckDeleteKeyAsync(ulong fingerprint)
+        public async Task<BoolResponse> DeleteKeyAsync(ulong fingerprint)
         {
-            const string resource = "check_delete_key";
+            const string resource = "delete_key";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
             request.AddJsonBody($"{{\"fingerprint\":{fingerprint}}}");
 
-            var response = await _restClient.ExecuteAsync<CheckDeleteKeyResponse>(request);
+            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
 
             return response;
         }
 
-        #endregion
-
-        #region Wallet node
-
-        public async Task<SyncStatusResponse> GetSyncStatusAsync()
+        public async Task<GenerateMnemonicResponse> GenerateMnemonicAsync()
         {
-            const string resource = "get_sync_status";
+            const string resource = "generate_mnemonic";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
             request.AddJsonBody("{}");
 
-            var response = await _restClient.ExecuteAsync<SyncStatusResponse>(request);
+            var response = await _restClient.ExecuteAsync<GenerateMnemonicResponse>(request);
+
+            return response;
+        }
+
+        public async Task<PrivateKeyResponse> GetPrivateKeyAsync(ulong fingerprint)
+        {
+            const string resource = "get_private_key";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"fingerprint\":{fingerprint}}}");
+
+            var response = await _restClient.ExecuteAsync<PrivateKeyResponse>(request);
+
+            return response;
+        }
+
+        public async Task<PublicKeysResponse> GetPublicKeysAsync()
+        {
+            const string resource = "get_public_keys";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody("{}");
+
+            var response = await _restClient.ExecuteAsync<PublicKeysResponse>(request);
+
+            return response;
+        }
+
+        public Task<FingerprintResponse> LoginAndRestoreAsync(ulong fingerprint, string filePath)
+        {
+            return LoginAsync(fingerprint, LoginType.Restore_Backup, filePath);
+        }
+
+        public Task<FingerprintResponse> LoginAndSkipAsync(ulong fingerprint)
+        {
+            return LoginAsync(fingerprint, LoginType.Skip);
+        }
+
+        public async Task<FingerprintResponse> LoginAsync(ulong fingerprint, LoginType loginType, string filePath = "", string host = "")
+        {
+            filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
+            const string resource = "log_in";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"fingerprint\":{fingerprint},\"type\":\"{loginType.ToString().ToLowerInvariant()}\",\"host\":\"{host}\",\"file_path\":\"{filePath}\"}}");
+
+            var response = await _restClient.ExecuteAsync<FingerprintResponse>(request);
+
+            return response;
+        }
+
+        public Task<FingerprintResponse> LoginAsync(ulong fingerprint)
+        {
+            return LoginAsync(fingerprint, LoginType.Start);
+        }
+
+        #endregion Key management
+
+        #region Wallet node
+
+        public async Task<dynamic> FarmBlockAsync(string address)
+        {
+            const string resource = "farm_block";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"address\":\"{address}\"}}");
+
+            var response = await _restClient.ExecuteAsync<HeightInfoResponse>(request);
 
             return response;
         }
@@ -164,30 +166,35 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<dynamic> FarmBlockAsync(string address)
+        public async Task<SyncStatusResponse> GetSyncStatusAsync()
         {
-            const string resource = "farm_block";
+            const string resource = "get_sync_status";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"address\":\"{address}\"}}");
+            request.AddJsonBody("{}");
 
-            var response = await _restClient.ExecuteAsync<HeightInfoResponse>(request);
+            var response = await _restClient.ExecuteAsync<SyncStatusResponse>(request);
 
             return response;
         }
 
-        #endregion
+        #endregion Wallet node
 
         #region Wallet management
 
-        public async Task<WalletsResponse> GetWalletsAsync()
+        public Task<dynamic> CreateNewDidWalletAsync(uint amount = 1)
         {
-            const string resource = "get_wallets";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody("{}");
+            var emptyBackupDids = new List<string>();
+            return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.New, amount: amount, backupDids: emptyBackupDids);
+        }
 
-            var response = await _restClient.ExecuteAsync<WalletsResponse>(request);
+        public Task<dynamic> CreateNewDidWalletFromRecoveryAsync(string filename)
+        {
+            return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.Recovery, fileName: filename);
+        }
 
-            return response;
+        public Task<TransactionResponse> CreateNewPoolWalletAsync(CreateWalletMode mode, WalletInitialTargetState targetState, ulong p2SingletonDelayTime, string p2SingletonDelayedPh)
+        {
+            return CreateWalletAsync<TransactionResponse>(walletType: WalletType.Pool_Wallet, createWalletMode: mode, initialTargetState: targetState, p2SingletonDelayedPh: p2SingletonDelayedPh, p2SingletonDelayTime: p2SingletonDelayTime);
         }
 
         public async Task<T> CreateWalletAsync<T>(WalletType walletType, CreateWalletMode? createWalletMode = null,
@@ -240,88 +247,42 @@ namespace ChiaApi
             return response;
         }
 
-        public Task<dynamic> CreateNewDidWalletAsync(uint amount = 1)
+        public async Task<WalletsResponse> GetWalletsAsync()
         {
-            var emptyBackupDids = new List<string>();
-            return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.New, amount: amount, backupDids: emptyBackupDids);
+            const string resource = "get_wallets";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody("{}");
+
+            var response = await _restClient.ExecuteAsync<WalletsResponse>(request);
+
+            return response;
         }
 
-        public Task<dynamic> CreateNewDidWalletFromRecoveryAsync(string filename)
-        {
-            return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.Recovery, fileName: filename);
-        }
-
-        public Task<TransactionResponse> CreateNewPoolWalletAsync(CreateWalletMode mode, WalletInitialTargetState targetState, ulong p2SingletonDelayTime, string p2SingletonDelayedPh)
-        {
-            return CreateWalletAsync<TransactionResponse>(walletType: WalletType.Pool_Wallet, createWalletMode: mode, initialTargetState: targetState, p2SingletonDelayedPh: p2SingletonDelayedPh, p2SingletonDelayTime: p2SingletonDelayTime);
-        }
-
-        #endregion
+        #endregion Wallet management
 
         #region Wallet
 
-        public async Task<WalletBalanceResponse> GetWalletBalanceAsync(uint walletId)
+        public async Task<BoolResponse> CreateBackupAsync(string filePath)
         {
-            const string resource = "get_wallet_balance";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
+            filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
 
-            var response = await _restClient.ExecuteAsync<WalletBalanceResponse>(request);
+            const string resource = "create_backup";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"file_path\":\"{filePath}\"}}");
+
+            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
 
             return response;
         }
 
-        public async Task<TransactionResponse> GetTransactionAsync(string transactionId)
+        public async Task<SignedTransactionResponse> CreateSignedTransactionAsync(ulong amount, ulong fee, string puzzleHash)
         {
-            const string resource = "get_transaction";
+            // TODO: use bech32 to convert the addresses to puzzle hashes instead of requiring the puzzle hash
+            const string resource = "create_signed_transaction";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"transaction_id\":{transactionId}}}");
+            request.AddJsonBody($"{{\"fee\":{fee},\"additions\":[{{\"amount\":{amount},\"puzzle_hash\":\"{puzzleHash}\"}}]}}");
 
-            var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
-
-            return response;
-        }
-
-        public async Task<TransactionsResponse> GetTransactionsAsync(string transactionId)
-        {
-            const string resource = "get_transactions";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"transaction_id\":{transactionId}}}");
-
-            var response = await _restClient.ExecuteAsync<TransactionsResponse>(request);
-
-            return response;
-        }
-
-        public async Task<AddressResponse> GetNextAddressAsync(uint walletId)
-        {
-            const string resource = "get_next_address";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"new_address\":true}}");
-
-            var response = await _restClient.ExecuteAsync<AddressResponse>(request);
-
-            return response;
-        }
-
-        public async Task<AddressResponse> GetAddressAsync(uint walletId)
-        {
-            const string resource = "get_next_address";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"new_address\":false}}");
-
-            var response = await _restClient.ExecuteAsync<AddressResponse>(request);
-
-            return response;
-        }
-
-        public async Task<TransactionResponse> SendTransactionAsync(uint walletId, ulong amount, ulong fee, string address)
-        {
-            const string resource = "send_transaction";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"amount\":{amount},\"fee\":{fee},\"address\":\"{address}\"}}");
-
-            var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
+            var response = await _restClient.ExecuteAsync<SignedTransactionResponse>(request);
 
             return response;
         }
@@ -337,25 +298,13 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<SignedTransactionResponse> CreateSignedTransactionAsync(ulong amount, ulong fee, string puzzleHash)
+        public async Task<AddressResponse> GetAddressAsync(uint walletId)
         {
-            // TODO: use bech32 to convert the addresses to puzzle hashes instead of requiring the puzzle hash 
-            const string resource = "create_signed_transaction";
+            const string resource = "get_next_address";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"fee\":{fee},\"additions\":[{{\"amount\":{amount},\"puzzle_hash\":\"{puzzleHash}\"}}]}}");
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"new_address\":false}}");
 
-            var response = await _restClient.ExecuteAsync<SignedTransactionResponse>(request);
-
-            return response;
-        }
-
-        public async Task<TransactionsCountResponse> GetTransactionCountAsync(uint walletId)
-        {
-            const string resource = "get_transaction_count";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
-
-            var response = await _restClient.ExecuteAsync<TransactionsCountResponse>(request);
+            var response = await _restClient.ExecuteAsync<AddressResponse>(request);
 
             return response;
         }
@@ -371,15 +320,68 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<BoolResponse> CreateBackupAsync(string filePath)
+        public async Task<AddressResponse> GetNextAddressAsync(uint walletId)
         {
-            filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
-
-            const string resource = "create_backup";
+            const string resource = "get_next_address";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"file_path\":\"{filePath}\"}}");
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"new_address\":true}}");
 
-            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
+            var response = await _restClient.ExecuteAsync<AddressResponse>(request);
+
+            return response;
+        }
+
+        public async Task<TransactionResponse> GetTransactionAsync(string transactionId)
+        {
+            const string resource = "get_transaction";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"transaction_id\":{transactionId}}}");
+
+            var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
+
+            return response;
+        }
+
+        public async Task<TransactionsCountResponse> GetTransactionCountAsync(uint walletId)
+        {
+            const string resource = "get_transaction_count";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
+
+            var response = await _restClient.ExecuteAsync<TransactionsCountResponse>(request);
+
+            return response;
+        }
+
+        public async Task<TransactionsResponse> GetTransactionsAsync(string transactionId)
+        {
+            const string resource = "get_transactions";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"transaction_id\":{transactionId}}}");
+
+            var response = await _restClient.ExecuteAsync<TransactionsResponse>(request);
+
+            return response;
+        }
+
+        public async Task<WalletBalanceResponse> GetWalletBalanceAsync(uint walletId)
+        {
+            const string resource = "get_wallet_balance";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
+
+            var response = await _restClient.ExecuteAsync<WalletBalanceResponse>(request);
+
+            return response;
+        }
+
+        public async Task<TransactionResponse> SendTransactionAsync(uint walletId, ulong amount, ulong fee, string address)
+        {
+            const string resource = "send_transaction";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"amount\":{amount},\"fee\":{fee},\"address\":\"{address}\"}}");
+
+            var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
 
             return response;
         }
@@ -404,9 +406,10 @@ namespace ChiaApi
             return response;
         }
 
-        #endregion
+        #endregion Wallet
 
         #region Coloured coins and trading
+
         /*
          * # Coloured coins and trading #
         * "/cc_get_colour": self.cc_get_colour
@@ -418,17 +421,6 @@ namespace ChiaApi
         * "/cancel_trade": self.cancel_trade
         */
 
-        public async Task<WalletIdResponse> CCSetNameAsync(uint walletId, string name)
-        {
-            const string resource = "cc_set_name";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"name\":\"{name}\"}}");
-
-            var response = await _restClient.ExecuteAsync<WalletIdResponse>(request);
-
-            return response;
-        }
-
         public async Task<WalletNameIdResponse> CCGetNameAsync(uint walletId)
         {
             const string resource = "cc_get_name";
@@ -436,6 +428,17 @@ namespace ChiaApi
             request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
 
             var response = await _restClient.ExecuteAsync<WalletNameIdResponse>(request);
+
+            return response;
+        }
+
+        public async Task<WalletIdResponse> CCSetNameAsync(uint walletId, string name)
+        {
+            const string resource = "cc_set_name";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"name\":\"{name}\"}}");
+
+            var response = await _restClient.ExecuteAsync<WalletIdResponse>(request);
 
             return response;
         }
@@ -451,9 +454,10 @@ namespace ChiaApi
             return response;
         }
 
-        #endregion
+        #endregion Coloured coins and trading
 
         #region DID Wallet
+
         /*
          * # DID Wallet #
         * "/did_update_recovery_ids": self.did_update_recovery_ids
@@ -463,19 +467,6 @@ namespace ChiaApi
         * "/did_get_information_needed_for_recovery": self.did_get_information_needed_for_recovery
         * "/did_create_backup_file": self.did_create_backup_file
         */
-
-        public async Task<dynamic> DidRecoverySpendAsync(ulong walletId, string attestFilename)
-        {
-            attestFilename = System.Web.HttpUtility.JavaScriptStringEncode(attestFilename);
-
-            const string resource = "did_recovery_spend";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"attest_filename\":\"{attestFilename}\"}}");
-
-            var response = await _restClient.ExecuteAsync<dynamic>(request);
-
-            return response;
-        }
 
         public async Task<dynamic> DidCreateAttestAsync(ulong walletId, string coinName, string pubKey, string puzzleHash, string filename)
         {
@@ -490,24 +481,50 @@ namespace ChiaApi
             return response;
         }
 
-        #endregion
+        public async Task<dynamic> DidRecoverySpendAsync(ulong walletId, string attestFilename)
+        {
+            attestFilename = System.Web.HttpUtility.JavaScriptStringEncode(attestFilename);
+
+            const string resource = "did_recovery_spend";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"attest_filename\":\"{attestFilename}\"}}");
+
+            var response = await _restClient.ExecuteAsync<dynamic>(request);
+
+            return response;
+        }
+
+        #endregion DID Wallet
 
         #region RL wallet
+
         /*
          * # Rate Limited Wallet #
         * "/rl_set_user_info": self.rl_set_user_info
         * "/send_clawback_transaction:": self.send_clawback_transaction
         * "/add_rate_limited_funds:": self.add_rate_limited_funds
         */
-        #endregion
+
+        #endregion RL wallet
 
         #region Pool Wallet
 
-        public async Task<TransactionResponse> PoolWalletSelfPoolAsync(ulong walletId)
+        public async Task<PoolWalletInfoResponse> GetPoolWalletStatusAsync(ulong walletId, ulong fee)
         {
-            const string resource = "pw_self_pool";
+            const string resource = "pw_status";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
             request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
+
+            var response = await _restClient.ExecuteAsync<PoolWalletInfoResponse>(request);
+
+            return response;
+        }
+
+        public async Task<TransactionResponse> PoolWalletAbsorbRewardsAsync(ulong walletId, ulong fee)
+        {
+            const string resource = "pw_absorb_rewards";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"fee\":{fee}}}");
 
             var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
 
@@ -527,27 +544,17 @@ namespace ChiaApi
             return response;
         }
 
-        public async Task<TransactionResponse> PoolWalletAbsorbRewardsAsync(ulong walletId, ulong fee)
+        public async Task<TransactionResponse> PoolWalletSelfPoolAsync(ulong walletId)
         {
-            const string resource = "pw_absorb_rewards";
+            const string resource = "pw_self_pool";
             var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId},\"fee\":{fee}}}");
+            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
 
             var response = await _restClient.ExecuteAsync<TransactionResponse>(request);
 
             return response;
         }
 
-        public async Task<PoolWalletInfoResponse> GetPoolWalletStatusAsync(ulong walletId, ulong fee)
-        {
-            const string resource = "pw_status";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"wallet_id\":{walletId}}}");
-
-            var response = await _restClient.ExecuteAsync<PoolWalletInfoResponse>(request);
-
-            return response;
-        }
-        #endregion
+        #endregion Pool Wallet
     }
 }

@@ -8,6 +8,7 @@ namespace ChiaApi.Models.Responses.FullNode
         public string String;
 
         public static implicit operator ConditionUnion(List<Condition> ConditionClassArray) => new ConditionUnion { ConditionArray = ConditionClassArray };
+
         public static implicit operator ConditionUnion(string String) => new ConditionUnion { String = String };
     }
 }

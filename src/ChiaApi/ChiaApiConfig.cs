@@ -8,10 +8,6 @@ namespace ChiaApi
 {
     public class ChiaApiConfig
     {
-        public string Host { get; }
-        public uint Port { get; }
-        public ILogger? Logger { get; }
-
         private readonly string _certFile;
         private readonly string _keyFile;
 
@@ -30,6 +26,10 @@ namespace ChiaApi
             _keyFile = keyFile;
             Logger = logger;
         }
+
+        public string Host { get; }
+        public ILogger? Logger { get; }
+        public uint Port { get; }
 
         internal X509CertificateCollection GetClientCertificates()
         {

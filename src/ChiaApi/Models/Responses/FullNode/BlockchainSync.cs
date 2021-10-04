@@ -4,6 +4,9 @@ namespace ChiaApi.Models.Responses.FullNode
 {
     public class BlockchainSync
     {
+        [JsonProperty("synced", NullValueHandling = NullValueHandling.Ignore)]
+        public bool Synced { get; set; }
+
         [JsonProperty("sync_mode", NullValueHandling = NullValueHandling.Ignore)]
         public bool SyncMode { get; set; }
 
@@ -12,8 +15,5 @@ namespace ChiaApi.Models.Responses.FullNode
 
         [JsonProperty("sync_tip_height", NullValueHandling = NullValueHandling.Ignore)]
         public ulong SyncTipHeight { get; set; }
-
-        [JsonProperty("synced", NullValueHandling = NullValueHandling.Ignore)]
-        public bool Synced { get; set; }
     }
 }

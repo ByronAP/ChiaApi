@@ -8,8 +8,8 @@ namespace ChiaApi.Utils
 {
     public static class Certificates
     {
-        private const string RSA_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
         private const string RSA_KEY_FOOTER = "-----END RSA PRIVATE KEY-----";
+        private const string RSA_KEY_HEADER = "-----BEGIN RSA PRIVATE KEY-----";
 
         /// <summary>
         /// Creates a <see cref="X509Certificate2"/> from given cert and key files.

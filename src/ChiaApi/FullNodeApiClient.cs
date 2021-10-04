@@ -12,7 +12,9 @@ namespace ChiaApi
 {
     public class FullNodeApiClient : ApiClientBase
     {
-        public FullNodeApiClient(ChiaApiConfig chiaApiConfig) : base(chiaApiConfig) { }
+        public FullNodeApiClient(ChiaApiConfig chiaApiConfig) : base(chiaApiConfig)
+        {
+        }
 
         #region Blockchain
 
@@ -141,7 +143,7 @@ namespace ChiaApi
             return response;
         }
 
-        #endregion
+        #endregion Blockchain
 
         #region Coins
 
@@ -276,7 +278,7 @@ namespace ChiaApi
             return response;
         }
 
-        #endregion
+        #endregion Coins
 
         #region MemPool
 
@@ -320,6 +322,6 @@ namespace ChiaApi
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
-        #endregion
+        #endregion MemPool
     }
 }

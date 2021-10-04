@@ -10,6 +10,5 @@ namespace ChiaApi.Models.Responses.Farmer
 
         [JsonProperty("signage_point", NullValueHandling = NullValueHandling.Ignore)]
         public SignagePoint? SignagePoint { get; set; }
-
     }
 }

@@ -20,28 +20,6 @@ namespace ChiaApi
             };
         }
 
-        public async Task<ConnectionsResponse> GetConnectionsAsync()
-        {
-            const string resource = "get_connections";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody("{}");
-
-            var response = await _restClient.ExecuteAsync<ConnectionsResponse>(request);
-
-            return response;
-        }
-
-        public async Task<BoolResponse> OpenConnectionAsync(string host, uint port)
-        {
-            const string resource = "open_connection";
-            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
-            request.AddJsonBody($"{{\"host\":\"{host}\",\"port\":{port}}}");
-
-            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
-
-            return response;
-        }
-
         public async Task<BoolResponse> CloseConnectionAsync(string nodeId)
         {
             const string resource = "close_connection";
@@ -49,6 +27,17 @@ namespace ChiaApi
             request.AddJsonBody($"{{\"node_id\":\"{nodeId}\"}}");
 
             var response = await _restClient.ExecuteAsync<BoolResponse>(request);
+
+            return response;
+        }
+
+        public async Task<ConnectionsResponse> GetConnectionsAsync()
+        {
+            const string resource = "get_connections";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody("{}");
+
+            var response = await _restClient.ExecuteAsync<ConnectionsResponse>(request);
 
             return response;
         }
@@ -74,6 +63,17 @@ namespace ChiaApi
             request.AddJsonBody("{}");
 
             var response = await _restClient.ExecuteAsync<NetworkInfoResponse>(request);
+
+            return response;
+        }
+
+        public async Task<BoolResponse> OpenConnectionAsync(string host, uint port)
+        {
+            const string resource = "open_connection";
+            var request = new RestRequest(resource, Method.POST, DataFormat.Json);
+            request.AddJsonBody($"{{\"host\":\"{host}\",\"port\":{port}}}");
+
+            var response = await _restClient.ExecuteAsync<BoolResponse>(request);
 
             return response;
         }

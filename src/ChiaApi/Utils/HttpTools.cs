@@ -147,7 +147,6 @@ namespace ChiaApi.Utils
             var pingSender = new Ping();
             var options = new PingOptions(128, true);
 
-
             var reply = pingSender.Send(url, (int)timeoutMs, buffer, options);
             if (reply != null && reply.Status == IPStatus.Success)
             {
