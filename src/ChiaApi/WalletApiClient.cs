@@ -1,4 +1,17 @@
-﻿/*
+﻿// ***********************************************************************
+// Assembly         : ChiaApi
+// Author           : bapen
+// Created          : 09-30-2021
+//
+// Last Modified By : bapen
+// Last Modified On : 10-04-2021
+// ***********************************************************************
+// <copyright file="WalletApiClient.cs" company="ByronAP">
+//     © 2008-2021 ByronAP
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*
  * STOPPING WORK ON THIS PART OF THE API UNTIL THE CAT1 vs CC api differences are resolved
  * https://www.chia.net/2021/09/23/chia-token-standard-naming.en.html
  * https://github.com/Chia-Network/chia-blockchain/discussions/8689
@@ -17,14 +30,28 @@ using System.Threading.Tasks;
 
 namespace ChiaApi
 {
+    /// <summary>
+    /// Class WalletApiClient.
+    /// Implements the <see cref="ChiaApi.ApiClientBase" />
+    /// </summary>
+    /// <seealso cref="ChiaApi.ApiClientBase" />
     public class WalletApiClient : ApiClientBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalletApiClient"/> class.
+        /// </summary>
+        /// <param name="chiaApiConfig">The chia API configuration.</param>
         public WalletApiClient(ChiaApiConfig chiaApiConfig) : base(chiaApiConfig)
         {
         }
 
         #region Key management
 
+        /// <summary>
+        /// Add key as an asynchronous operation.
+        /// </summary>
+        /// <param name="mnemonic">The mnemonic.</param>
+        /// <returns>A Task&lt;FingerprintResponse&gt; representing the asynchronous operation.</returns>
         public async Task<FingerprintResponse> AddKeyAsync(IEnumerable<string> mnemonic)
         {
             const string resource = "add_key";
@@ -47,6 +74,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Check delete key as an asynchronous operation.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <returns>A Task&lt;CheckDeleteKeyResponse&gt; representing the asynchronous operation.</returns>
         public async Task<CheckDeleteKeyResponse> CheckDeleteKeyAsync(ulong fingerprint)
         {
             const string resource = "check_delete_key";
@@ -58,6 +90,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Delete all keys as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;BoolResponse&gt; representing the asynchronous operation.</returns>
         public async Task<BoolResponse> DeleteAllKeysAsync()
         {
             const string resource = "delete_all_keys";
@@ -69,6 +105,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Delete key as an asynchronous operation.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <returns>A Task&lt;BoolResponse&gt; representing the asynchronous operation.</returns>
         public async Task<BoolResponse> DeleteKeyAsync(ulong fingerprint)
         {
             const string resource = "delete_key";
@@ -80,6 +121,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Generate mnemonic as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;GenerateMnemonicResponse&gt; representing the asynchronous operation.</returns>
         public async Task<GenerateMnemonicResponse> GenerateMnemonicAsync()
         {
             const string resource = "generate_mnemonic";
@@ -91,6 +136,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get private key as an asynchronous operation.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <returns>A Task&lt;PrivateKeyResponse&gt; representing the asynchronous operation.</returns>
         public async Task<PrivateKeyResponse> GetPrivateKeyAsync(ulong fingerprint)
         {
             const string resource = "get_private_key";
@@ -102,6 +152,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get public keys as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;PublicKeysResponse&gt; representing the asynchronous operation.</returns>
         public async Task<PublicKeysResponse> GetPublicKeysAsync()
         {
             const string resource = "get_public_keys";
@@ -113,16 +167,35 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Logins the and restore asynchronous.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>Task&lt;FingerprintResponse&gt;.</returns>
         public Task<FingerprintResponse> LoginAndRestoreAsync(ulong fingerprint, string filePath)
         {
             return LoginAsync(fingerprint, LoginType.Restore_Backup, filePath);
         }
 
+        /// <summary>
+        /// Logins the and skip asynchronous.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <returns>Task&lt;FingerprintResponse&gt;.</returns>
         public Task<FingerprintResponse> LoginAndSkipAsync(ulong fingerprint)
         {
             return LoginAsync(fingerprint, LoginType.Skip);
         }
 
+        /// <summary>
+        /// Login as an asynchronous operation.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <param name="loginType">Type of the login.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="host">The host.</param>
+        /// <returns>A Task&lt;FingerprintResponse&gt; representing the asynchronous operation.</returns>
         public async Task<FingerprintResponse> LoginAsync(ulong fingerprint, LoginType loginType, string filePath = "", string host = "")
         {
             filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
@@ -135,6 +208,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Logins the asynchronous.
+        /// </summary>
+        /// <param name="fingerprint">The fingerprint.</param>
+        /// <returns>Task&lt;FingerprintResponse&gt;.</returns>
         public Task<FingerprintResponse> LoginAsync(ulong fingerprint)
         {
             return LoginAsync(fingerprint, LoginType.Start);
@@ -144,6 +222,11 @@ namespace ChiaApi
 
         #region Wallet node
 
+        /// <summary>
+        /// Farm block as an asynchronous operation.
+        /// </summary>
+        /// <param name="address">The address.</param>
+        /// <returns>A Task&lt;dynamic&gt; representing the asynchronous operation.</returns>
         public async Task<dynamic> FarmBlockAsync(string address)
         {
             const string resource = "farm_block";
@@ -155,6 +238,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get height information as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;HeightInfoResponse&gt; representing the asynchronous operation.</returns>
         public async Task<HeightInfoResponse> GetHeightInfoAsync()
         {
             const string resource = "get_height_info";
@@ -166,6 +253,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get synchronize status as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;SyncStatusResponse&gt; representing the asynchronous operation.</returns>
         public async Task<SyncStatusResponse> GetSyncStatusAsync()
         {
             const string resource = "get_sync_status";
@@ -181,22 +272,59 @@ namespace ChiaApi
 
         #region Wallet management
 
+        /// <summary>
+        /// Creates the new did wallet asynchronous.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> CreateNewDidWalletAsync(uint amount = 1)
         {
             var emptyBackupDids = new List<string>();
             return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.New, amount: amount, backupDids: emptyBackupDids);
         }
 
+        /// <summary>
+        /// Creates the new did wallet from recovery asynchronous.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> CreateNewDidWalletFromRecoveryAsync(string filename)
         {
             return CreateWalletAsync<dynamic>(walletType: WalletType.DID_Wallet, didType: Did_Type.Recovery, fileName: filename);
         }
 
+        /// <summary>
+        /// Creates the new pool wallet asynchronous.
+        /// </summary>
+        /// <param name="mode">The mode.</param>
+        /// <param name="targetState">State of the target.</param>
+        /// <param name="p2SingletonDelayTime">The p2 singleton delay time.</param>
+        /// <param name="p2SingletonDelayedPh">The p2 singleton delayed ph.</param>
+        /// <returns>Task&lt;TransactionResponse&gt;.</returns>
         public Task<TransactionResponse> CreateNewPoolWalletAsync(CreateWalletMode mode, WalletInitialTargetState targetState, ulong p2SingletonDelayTime, string p2SingletonDelayedPh)
         {
             return CreateWalletAsync<TransactionResponse>(walletType: WalletType.Pool_Wallet, createWalletMode: mode, initialTargetState: targetState, p2SingletonDelayedPh: p2SingletonDelayedPh, p2SingletonDelayTime: p2SingletonDelayTime);
         }
 
+        /// <summary>
+        /// Create wallet as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="walletType">Type of the wallet.</param>
+        /// <param name="createWalletMode">The create wallet mode.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="pubKey">The pub key.</param>
+        /// <param name="rLType">Type of the r l.</param>
+        /// <param name="didType">Type of the did.</param>
+        /// <param name="fee">The fee.</param>
+        /// <param name="amount">The amount.</param>
+        /// <param name="initialTargetState">Initial state of the target.</param>
+        /// <param name="backupDids">The backup dids.</param>
+        /// <param name="backupIdsNeeded">The backup ids needed.</param>
+        /// <param name="p2SingletonDelayTime">The p2 singleton delay time.</param>
+        /// <param name="p2SingletonDelayedPh">The p2 singleton delayed ph.</param>
+        /// <param name="host">The host.</param>
+        /// <returns>A Task&lt;T&gt; representing the asynchronous operation.</returns>
         public async Task<T> CreateWalletAsync<T>(WalletType walletType, CreateWalletMode? createWalletMode = null,
             string? fileName = null, string? pubKey = null, RLType? rLType = null, Did_Type? didType = null,
             decimal? fee = null, uint? amount = null, WalletInitialTargetState? initialTargetState = null,
@@ -247,6 +375,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get wallets as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;WalletsResponse&gt; representing the asynchronous operation.</returns>
         public async Task<WalletsResponse> GetWalletsAsync()
         {
             const string resource = "get_wallets";
@@ -262,6 +394,11 @@ namespace ChiaApi
 
         #region Wallet
 
+        /// <summary>
+        /// Create backup as an asynchronous operation.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>A Task&lt;BoolResponse&gt; representing the asynchronous operation.</returns>
         public async Task<BoolResponse> CreateBackupAsync(string filePath)
         {
             filePath = System.Web.HttpUtility.JavaScriptStringEncode(filePath);
@@ -275,6 +412,13 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Create signed transaction as an asynchronous operation.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="fee">The fee.</param>
+        /// <param name="puzzleHash">The puzzle hash.</param>
+        /// <returns>A Task&lt;SignedTransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<SignedTransactionResponse> CreateSignedTransactionAsync(ulong amount, ulong fee, string puzzleHash)
         {
             // TODO: use bech32 to convert the addresses to puzzle hashes instead of requiring the puzzle hash
@@ -287,6 +431,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Delete unconfirmed transactions as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;dynamic&gt; representing the asynchronous operation.</returns>
         public async Task<dynamic> DeleteUnconfirmedTransactionsAsync(uint walletId)
         {
             const string resource = "delete_unconfirmed_transactions";
@@ -298,6 +447,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get address as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;AddressResponse&gt; representing the asynchronous operation.</returns>
         public async Task<AddressResponse> GetAddressAsync(uint walletId)
         {
             const string resource = "get_next_address";
@@ -309,6 +463,10 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get farmed amount as an asynchronous operation.
+        /// </summary>
+        /// <returns>A Task&lt;FarmedAmountResponse&gt; representing the asynchronous operation.</returns>
         public async Task<FarmedAmountResponse> GetFarmedAmountAsync()
         {
             const string resource = "get_farmed_amount";
@@ -320,6 +478,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get next address as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;AddressResponse&gt; representing the asynchronous operation.</returns>
         public async Task<AddressResponse> GetNextAddressAsync(uint walletId)
         {
             const string resource = "get_next_address";
@@ -331,6 +494,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get transaction as an asynchronous operation.
+        /// </summary>
+        /// <param name="transactionId">The transaction identifier.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> GetTransactionAsync(string transactionId)
         {
             const string resource = "get_transaction";
@@ -342,6 +510,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get transaction count as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;TransactionsCountResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionsCountResponse> GetTransactionCountAsync(uint walletId)
         {
             const string resource = "get_transaction_count";
@@ -353,6 +526,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get transactions as an asynchronous operation.
+        /// </summary>
+        /// <param name="transactionId">The transaction identifier.</param>
+        /// <returns>A Task&lt;TransactionsResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionsResponse> GetTransactionsAsync(string transactionId)
         {
             const string resource = "get_transactions";
@@ -364,6 +542,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Get wallet balance as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;WalletBalanceResponse&gt; representing the asynchronous operation.</returns>
         public async Task<WalletBalanceResponse> GetWalletBalanceAsync(uint walletId)
         {
             const string resource = "get_wallet_balance";
@@ -375,6 +558,14 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Send transaction as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="amount">The amount.</param>
+        /// <param name="fee">The fee.</param>
+        /// <param name="address">The address.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> SendTransactionAsync(uint walletId, ulong amount, ulong fee, string address)
         {
             const string resource = "send_transaction";
@@ -386,6 +577,13 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Sends the transaction multi.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="fee">The fee.</param>
+        /// <param name="additions">The additions.</param>
+        /// <returns>TransactionResponse.</returns>
         public async Task<TransactionResponse> SendTransactionMulti(string walletId, ulong fee, IEnumerable<TransactionAddition> additions)
         {
             const string resource = "send_transaction_multi";
@@ -421,6 +619,11 @@ namespace ChiaApi
         * "/cancel_trade": self.cancel_trade
         */
 
+        /// <summary>
+        /// Cc get name as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;WalletNameIdResponse&gt; representing the asynchronous operation.</returns>
         public async Task<WalletNameIdResponse> CCGetNameAsync(uint walletId)
         {
             const string resource = "cc_get_name";
@@ -432,6 +635,12 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Cc set name as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>A Task&lt;WalletIdResponse&gt; representing the asynchronous operation.</returns>
         public async Task<WalletIdResponse> CCSetNameAsync(uint walletId, string name)
         {
             const string resource = "cc_set_name";
@@ -443,6 +652,14 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Cc spend as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="innerAddress">The inner address.</param>
+        /// <param name="amount">The amount.</param>
+        /// <param name="fee">The fee.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> CCSpendAsync(uint walletId, string innerAddress, ulong amount, ulong fee)
         {
             const string resource = "cc_spend";
@@ -468,6 +685,15 @@ namespace ChiaApi
         * "/did_create_backup_file": self.did_create_backup_file
         */
 
+        /// <summary>
+        /// Did create attest as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="coinName">Name of the coin.</param>
+        /// <param name="pubKey">The pub key.</param>
+        /// <param name="puzzleHash">The puzzle hash.</param>
+        /// <param name="filename">The filename.</param>
+        /// <returns>A Task&lt;dynamic&gt; representing the asynchronous operation.</returns>
         public async Task<dynamic> DidCreateAttestAsync(ulong walletId, string coinName, string pubKey, string puzzleHash, string filename)
         {
             filename = System.Web.HttpUtility.JavaScriptStringEncode(filename);
@@ -481,6 +707,12 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Did recovery spend as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="attestFilename">The attest filename.</param>
+        /// <returns>A Task&lt;dynamic&gt; representing the asynchronous operation.</returns>
         public async Task<dynamic> DidRecoverySpendAsync(ulong walletId, string attestFilename)
         {
             attestFilename = System.Web.HttpUtility.JavaScriptStringEncode(attestFilename);
@@ -509,6 +741,12 @@ namespace ChiaApi
 
         #region Pool Wallet
 
+        /// <summary>
+        /// Get pool wallet status as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="fee">The fee.</param>
+        /// <returns>A Task&lt;PoolWalletInfoResponse&gt; representing the asynchronous operation.</returns>
         public async Task<PoolWalletInfoResponse> GetPoolWalletStatusAsync(ulong walletId, ulong fee)
         {
             const string resource = "pw_status";
@@ -520,6 +758,12 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Pool wallet absorb rewards as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="fee">The fee.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> PoolWalletAbsorbRewardsAsync(ulong walletId, ulong fee)
         {
             const string resource = "pw_absorb_rewards";
@@ -531,6 +775,14 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Pool wallet join pool as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <param name="targetPuzzleHash">The target puzzle hash.</param>
+        /// <param name="relativeLockHeight">Height of the relative lock.</param>
+        /// <param name="poolUrl">The pool URL.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> PoolWalletJoinPoolAsync(ulong walletId, string targetPuzzleHash, ulong relativeLockHeight, string poolUrl)
         {
             poolUrl = System.Web.HttpUtility.JavaScriptStringEncode(poolUrl);
@@ -544,6 +796,11 @@ namespace ChiaApi
             return response;
         }
 
+        /// <summary>
+        /// Pool wallet self pool as an asynchronous operation.
+        /// </summary>
+        /// <param name="walletId">The wallet identifier.</param>
+        /// <returns>A Task&lt;TransactionResponse&gt; representing the asynchronous operation.</returns>
         public async Task<TransactionResponse> PoolWalletSelfPoolAsync(ulong walletId)
         {
             const string resource = "pw_self_pool";

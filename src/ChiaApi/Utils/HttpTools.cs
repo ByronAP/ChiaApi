@@ -1,4 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// ***********************************************************************
+// Assembly         : ChiaApi
+// Author           : bapen
+// Created          : 09-27-2021
+//
+// Last Modified By : bapen
+// Last Modified On : 10-04-2021
+// ***********************************************************************
+// <copyright file="HttpTools.cs" company="ByronAP">
+//     © 2008-2021 ByronAP
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -12,23 +25,60 @@ using System.Threading.Tasks;
 
 namespace ChiaApi.Utils
 {
+    /// <summary>
+    /// Class HttpTools.
+    /// </summary>
     public class HttpTools
     {
+        /// <summary>
+        /// Class HttpRestClient.
+        /// </summary>
         public class HttpRestClient
         {
+            /// <summary>
+            /// Gets or sets the retry wait.
+            /// </summary>
+            /// <value>The retry wait.</value>
             public TimeSpan RetryWait { get; set; } = TimeSpan.FromSeconds(1);
+
+            /// <summary>
+            /// Gets or sets the maximum retries.
+            /// </summary>
+            /// <value>The maximum retries.</value>
             public uint MaxRetries { get; set; } = 6;
+
+            /// <summary>
+            /// Gets or sets a value indicating whether [backoff exponentially].
+            /// </summary>
+            /// <value><c>true</c> if [backoff exponentially]; otherwise, <c>false</c>.</value>
             public bool BackoffExponentially { get; set; } = true;
 
+            /// <summary>
+            /// The rest client
+            /// </summary>
             private readonly IRestClient _restClient;
+
+            /// <summary>
+            /// The logger
+            /// </summary>
             private readonly ILogger? _logger;
 
+            /// <summary>
+            /// Gets or sets the proxy.
+            /// </summary>
+            /// <value>The proxy.</value>
             public IWebProxy? Proxy
             {
                 get => _restClient.Proxy;
                 set => _restClient.Proxy = value;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="HttpRestClient"/> class.
+            /// </summary>
+            /// <param name="baseUrl">The base URL.</param>
+            /// <param name="clientCertificates">The client certificates.</param>
+            /// <param name="logger">The logger.</param>
             public HttpRestClient(string baseUrl, X509CertificateCollection? clientCertificates = null, ILogger? logger = null)
             {
                 _logger = logger;
@@ -41,6 +91,12 @@ namespace ChiaApi.Utils
                 };
             }
 
+            /// <summary>
+            /// Execute as an asynchronous operation.
+            /// </summary>
+            /// <param name="request">The request.</param>
+            /// <returns>A Task&lt;IRestResponse&gt; representing the asynchronous operation.</returns>
+            /// <exception cref="System.Net.Http.HttpRequestException"></exception>
             public async Task<IRestResponse> ExecuteAsync(IRestRequest request)
             {
             RETRY:
@@ -63,6 +119,13 @@ namespace ChiaApi.Utils
                 throw new HttpRequestException();
             }
 
+            /// <summary>
+            /// Execute as an asynchronous operation.
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <param name="request">The request.</param>
+            /// <returns>A Task&lt;T&gt; representing the asynchronous operation.</returns>
+            /// <exception cref="System.Net.Http.HttpRequestException"></exception>
             public async Task<T> ExecuteAsync<T>(IRestRequest request)
             {
             RETRY:
@@ -93,9 +156,9 @@ namespace ChiaApi.Utils
         /// <summary>
         /// Performs a ping to the host N times.
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="timeoutMs"></param>
-        /// <param name="samples"></param>
+        /// <param name="url">The URL.</param>
+        /// <param name="timeoutMs">The timeout ms.</param>
+        /// <param name="samples">The samples.</param>
         /// <returns>The average round trip time to the host. long.MaxValue = error</returns>
         public static TimeSpan PingSample(string url, uint timeoutMs = 8000, ushort samples = 6)
         {
@@ -135,8 +198,8 @@ namespace ChiaApi.Utils
         /// <summary>
         /// Performs a ping to the host.
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="timeoutMs"></param>
+        /// <param name="url">The URL.</param>
+        /// <param name="timeoutMs">The timeout ms.</param>
         /// <returns>The round trip time to the host. long.MaxValue = error</returns>
         public static TimeSpan Ping(string url, uint timeoutMs = 8000)
         {
