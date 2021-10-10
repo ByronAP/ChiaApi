@@ -18,6 +18,8 @@ Api Docs: https://github.com/Chia-Network/chia-blockchain/wiki/RPC-Interfaces<br
 * HarvesterApiClient
 * WalletApiClient
 
+#### Documentation
+https://docs.chiaapis.com
 
 ## Contributing
 Pull requests are welcome but please open an issue first.
