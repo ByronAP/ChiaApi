@@ -2,7 +2,10 @@
 API client library for the Chia Blockchain
 
 Chia Blockchain: https://github.com/Chia-Network/chia-blockchain<br/>
-Api Docs: https://github.com/Chia-Network/chia-blockchain/wiki/RPC-Interfaces<br/>
+Chia Api Docs: https://github.com/Chia-Network/chia-blockchain/wiki/RPC-Interfaces<br/>
+
+Library API Docs: https://docs.chiaapis.com<br/>
+Other Chia Stuff: https://chiaapis.com<br/>
 
 
 ## Installation
