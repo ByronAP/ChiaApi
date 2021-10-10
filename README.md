@@ -1,4 +1,4 @@
-# ChiaApi [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+# ChiaApi
 API client library for the Chia Blockchain
 
 Chia Blockchain: https://github.com/Chia-Network/chia-blockchain<br/>
@@ -29,6 +29,6 @@ Pull requests are welcome but please open an issue first.
 
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 Not affiliated with Chia Blockchain
