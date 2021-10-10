@@ -1,4 +1,4 @@
-# ChiaApi
+# ChiaApi [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 API client library for the Chia Blockchain
 
 Chia Blockchain: https://github.com/Chia-Network/chia-blockchain<br/>
