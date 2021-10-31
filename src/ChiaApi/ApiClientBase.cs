@@ -4,7 +4,7 @@
 // Created          : 09-28-2021
 //
 // Last Modified By : bapen
-// Last Modified On : 10-04-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="ApiClientBase.cs" company="ByronAP">
 //     © 2008-2021 ByronAP
@@ -43,7 +43,9 @@ namespace ChiaApi
             _chiaApiConfig = chiaApiConfig;
             _restClient = new HttpRestClient($"https://{_chiaApiConfig.Host}:{_chiaApiConfig.Port}", _chiaApiConfig.GetClientCertificates(), _chiaApiConfig.Logger)
             {
-                BackoffExponentially = true
+                BackoffExponentially = chiaApiConfig.RetryBackoffExponentially,
+                MaxRetries = chiaApiConfig.MaxRetries,
+                RetryWait = chiaApiConfig.RetryWait
             };
         }
 

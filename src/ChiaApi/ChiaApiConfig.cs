@@ -4,7 +4,7 @@
 // Created          : 09-27-2021
 //
 // Last Modified By : bapen
-// Last Modified On : 10-04-2021
+// Last Modified On : 10-31-2021
 // ***********************************************************************
 // <copyright file="ChiaApiConfig.cs" company="ByronAP">
 //     © 2008-2021 ByronAP
@@ -48,7 +48,7 @@ namespace ChiaApi
         /// <exception cref="System.ArgumentNullException">host</exception>
         /// <exception cref="System.IO.FileNotFoundException">certFile</exception>
         /// <exception cref="System.IO.FileNotFoundException">keyFile</exception>
-        public ChiaApiConfig(string certFile, string keyFile, string host, uint port, ILogger? logger = null)
+        public ChiaApiConfig(string certFile, string keyFile, string host, uint port, ILogger? logger = null, uint maxRetries = 4, TimeSpan? retryWait = null, bool retryBackoffExp = true)
         {
             if (string.IsNullOrEmpty(certFile) || string.IsNullOrWhiteSpace(certFile)) throw new ArgumentNullException(nameof(certFile));
             if (string.IsNullOrEmpty(keyFile) || string.IsNullOrWhiteSpace(keyFile)) throw new ArgumentNullException(nameof(keyFile));
@@ -62,6 +62,9 @@ namespace ChiaApi
             _certFile = certFile;
             _keyFile = keyFile;
             Logger = logger;
+            MaxRetries = maxRetries;
+            RetryWait = retryWait ?? TimeSpan.FromSeconds(1);
+            RetryBackoffExponentially = retryBackoffExp;
         }
 
         /// <summary>
@@ -92,5 +95,20 @@ namespace ChiaApi
             var certs = Certificates.Load(_certFile, _keyFile);
             return certs;
         }
+
+        /// <summary>
+        /// Maximum number of times a request will be retried.
+        /// </summary>
+        public uint MaxRetries { get; }
+
+        /// <summary>
+        /// The amount of time to wait between retries.
+        /// </summary>
+        public TimeSpan RetryWait { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool RetryBackoffExponentially { get; }
     }
 }
